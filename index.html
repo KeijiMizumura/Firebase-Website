@@ -28,7 +28,7 @@
         #messages{
             overflow: scroll;
             width: 100%;
-            min-height: 300px;
+            max-height: 500px;
             background-color: #fff;
             padding: 30px;
         }
@@ -59,9 +59,7 @@
   };
   firebase.initializeApp(config);
 
-  setInterval(showUpdate, 50);
-  
-  
+  // setInterval(showUpdate, 50);  
   
   function showUpdate(){
     var output = document.getElementById("messages");
@@ -77,6 +75,8 @@
     });
    
   }
+
+  showUpdate();
 
 
   function addUser(){
