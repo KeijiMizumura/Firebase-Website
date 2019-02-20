@@ -25,11 +25,30 @@
         
 <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
 <script>
+    var notValid = true;
 
-   var username = prompt("Username");
+    while(notValid){
+        var username = prompt("Username");
+        if(username != null){
+            notValid = false;
+        }
+    }
 
-   var elem = document.getElementById('chat_content');
-    elem.scrollTop = elem.scrollHeight;
+    var password = prompt("Global Chat Password");
+
+    if(password != "privatechatonly"){
+        alert("Incorrect Username and Password!");
+        location.reload();
+    }
+    
+
+   
+
+    window.onload = function(){
+      var elem = document.getElementById('chat_content');
+      elem.scrollTop = elem.scrollHeight;  
+    }
+   
 
 
    function runScript(e) {
