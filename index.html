@@ -18,7 +18,7 @@
     </div>
 
     <div class="chat-message">
-        <input type="text" placeholder="Type a message" id="user-message">
+        <input type="text" placeholder="Type a message" id="user-message" onkeypress="return runScript(event)">
         <button onclick="addUser()">Send</button>
     </div>
 
@@ -27,6 +27,17 @@
 <script>
 
    var username = prompt("Username");
+
+   var elem = document.getElementById('chat_content');
+    elem.scrollTop = elem.scrollHeight;
+
+
+   function runScript(e) {
+    //See notes about 'which' and 'key'
+    if (e.keyCode == 13) {
+        addUser();
+    }
+}
 
   // Initialize Firebase
   var config = {
@@ -91,6 +102,9 @@
     });
 
     document.getElementById('user-message').value = "";
+
+    var elem = document.getElementById('chat_content');
+    elem.scrollTop = elem.scrollHeight;
 
   }
 
