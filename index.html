@@ -25,6 +25,8 @@
         
 <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
 <script>
+
+
     var notValid = true;
 
     while(notValid){
@@ -34,16 +36,24 @@
         }
     }
 
-    var password = prompt("Global Chat Password");
+    var makeRoom = confirm("Do you want to create or join a room?");
 
-    if(password != "privatechatonly"){
-        alert("Incorrect Username and Password!");
-        location.reload();
-    }
+    var roomName = "";
     
+    if(makeRoom){
+        roomName = prompt("Write any existing room name or create your own! Cancel if you want to go global!");
+        if(roomName == null){
+            roomName = "global";
+            alert("Canceled: Using global room");
+        }
+    }
+    else{
+        roomName = "global";
+        alert("Using global room")
+    }
 
+    
    
-
     window.onload = function(){
       var elem = document.getElementById('chat_content');
       elem.scrollTop = elem.scrollHeight;  
@@ -76,7 +86,7 @@
     
     output.innerHTML = "";
     
-    var playersRef = firebase.database().ref("messages/");
+    var playersRef = firebase.database().ref("messages/" + roomName);
 
     playersRef.on("child_added", function(data, prevChildKey) {
     var message = data.val();
@@ -99,7 +109,7 @@
 
   function addUser(){
     var dbRef = firebase.database().ref();
-    var usersRef = dbRef.child('messages');
+    var usersRef = dbRef.child('messages/' + roomName);
     var newUserRef = usersRef.push();
 
     var content = document.getElementById('user-message').value;
