@@ -4,50 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        *{
-            padding: 0;
-            margin: 0;
-        }
-        body{
-            background-color: #f1f1f1;
-        }
-        #content{
-            width: 500px;
-        }
-        .inputs{
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            background-color: #fff;
-        }
-        #messages{
-            overflow: scroll;
-            width: 100%;
-            max-height: 500px;
-            background-color: #fff;
-            padding: 30px;
-        }
-    </style>
+    <title>Fakebook Messenger</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <h1>Global Chat</h1>
+    </header>
 
-<div id="messages">
-    
-</div>
-<div class="inputs">
-    <input type="text" placeholder="Username" id="username">
-    <input type="text" placeholder="Content" id="content">
-    <button onclick="addUser()">Message</button>
-    <button onclick="showUpdate()">UPDATE</button>
-</div>
-    
+    <div id="chat_content">
+        
+    </div>
+
+    <div class="chat-message">
+        <input type="text" placeholder="Type a message" id="user-message">
+        <button onclick="addUser()">Send</button>
+    </div>
+
+        
 <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
 <script>
+
+   var username = prompt("Username");
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAI5916XcaPtU2eb0v4BqYSGNidGk81lD8",
@@ -62,16 +42,24 @@
   // setInterval(showUpdate, 50);  
   
   function showUpdate(){
-    var output = document.getElementById("messages");
+    var output = document.getElementById("chat_content");
     
     output.innerHTML = "";
     
     var playersRef = firebase.database().ref("messages/");
 
-    var output = document.getElementById("messages");
-        playersRef.on("child_added", function(data, prevChildKey) {
-        var message = data.val();
-        output.innerHTML += "<b>" + message.username + "</b>: " + message.content + "<br><br>"; 
+    playersRef.on("child_added", function(data, prevChildKey) {
+    var message = data.val();
+
+    output.innerHTML += `
+        <div class="container">
+                <div class="chat-box">
+                    <p class="username">${message.username}</p>
+                    <p class="content">${message.content}</p>
+                    <p class="time">${message.time}</p>
+                </div>
+        </div>
+    `;
     });
    
   }
@@ -84,15 +72,23 @@
     var usersRef = dbRef.child('messages');
     var newUserRef = usersRef.push();
 
-    var username = document.getElementById('username').value;
-    var content = document.getElementById('content').value;
+    var content = document.getElementById('user-message').value;
+
+    var date = new Date();
+
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
 
     newUserRef.set({
         content: content,
-        username: username
+        username: username,
+        time: strTime
     });
-
-    alert("Message Sent");
 
   }
 
